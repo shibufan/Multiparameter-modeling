@@ -4,8 +4,8 @@ clc;
 %% 1.read data & models
 load('Test_Data.mat') %read test data
 
-load('trained moel/ANN/net.mat') %read ANN model
-load('trained moel/SVM/svm.mat') %read SVM model
+load('net.mat') %read ANN model
+load('svm.mat') %read SVM model
 %% 2.Testing
 %1.SVM predict
 % actual order of TF in test data
