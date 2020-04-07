@@ -158,18 +158,18 @@ net4.trainParam.lr = lr(4);
 net4 = train(net4,p_train_4,t_train_4);
 
 %% save ANN model
-save('trained model/ANN/net','net1');
-save('trained model/ANN/net','net2','-append');
-save('trained model/ANN/net','net3','-append');
-save('trained model/ANN/net','net4','-append');
-save('trained model/ANN/net','ps_input_1','-append');
-save('trained model/ANN/net','ps_input_2','-append');
-save('trained model/ANN/net','ps_input_3','-append');
-save('trained model/ANN/net','ps_input_4','-append');
-save('trained model/ANN/net','ps_output_1','-append');
-save('trained model/ANN/net','ps_output_2','-append');
-save('trained model/ANN/net','ps_output_3','-append');
-save('trained model/ANN/net','ps_output_4','-append');
+save('net','net1');
+save('net','net2','-append');
+save('net','net3','-append');
+save('net','net4','-append');
+save('net','ps_input_1','-append');
+save('net','ps_input_2','-append');
+save('net','ps_input_3','-append');
+save('net','ps_input_4','-append');
+save('net','ps_output_1','-append');
+save('net','ps_output_2','-append');
+save('net','ps_output_3','-append');
+save('net','ps_output_4','-append');
 
 %% 5.SVM training based on libsvm
 % normalization
@@ -191,5 +191,5 @@ svm_model = svmtrain(SVM_Train_label,SVM_Train_matrix,cmd);
 SVM_train_result = [SVM_Train_label predict_SVM_train_label];
 
 %% save SVM model
-save('trained model/SVM/svm','svm_model');
-save('trained model/SVM/svm','PS','-append');
+save('svm','svm_model');
+save('svm','PS','-append');
