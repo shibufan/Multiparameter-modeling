@@ -1,5 +1,5 @@
-clear;
-clc;
+% clear;
+% clc;
 
 %% 1.read data & models
 load('Real_Test_Data.mat') %read test data
