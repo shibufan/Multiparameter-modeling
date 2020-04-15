@@ -1,12 +1,13 @@
-clear;
-clc;
+% clear;
+% clc;
 %% ANN parameters
-num_n=[300 300 250 200]; %Node number of the hidden layer
-num_epochs=[50 50 100 100]; %Number of epochs
-goal=[1e-8 1e-8 1e-8 1e-8]; %Optimization goal
-lr=[0.1 0.1 0.05 0.05]; %Learning rate
+% num_n=[17 17 6 6]; %Node number of the hidden layer
+num_epochs=[2000 2000 2000 2000]; %Number of epochs
+goal=[1e-5 1e-5 1e-5 1e-5]; %Optimization goal
+% lr=[0.088910333106323 0.114720424756302 0.116821559089208 0.069624750145961]; %Learning rate
 %% 1.read data
-load Training_Data.mat
+load('Training_Data.mat')
+load('Real_Test_Data.mat') %read test data
 
 %% 2.Vector fitting of S-parameters
 responses_size = size(responses(:,1),1);
@@ -15,6 +16,14 @@ for i=1:responses_size
     data=responses{i,1}(:,2)+responses{i,1}(:,3)*1j;
     fit_data=rationalfit(freq,data);
     order_TF(i)=size(fit_data.A(:,1),1);
+end
+
+test_responses_size = size(real_test_responses(:,1),1);
+for i=1:test_responses_size
+    freq=real_test_responses{i,1}(:,1);
+    data=real_test_responses{i,1}(:,2)+real_test_responses{i,1}(:,3)*1j;
+    fit_data=rationalfit(freq,data);
+    test_order_TF(i)=size(fit_data.A(:,1),1);
 end
 
 %% 3.classification
@@ -173,20 +182,27 @@ save('trained model/ANN/net','ps_output_4','-append');
 
 %% 5.SVM training based on libsvm
 % normalization
-[SVM_Train_matrix,PS] = mapminmax(candidates');
+new_candidates=[candidates;real_test_candidates];
+[SVM_Train_matrix,PS] = mapminmax(new_candidates');
+SVM_Train_matrix = SVM_Train_matrix';
+ 
+SVM_Train_label = [order_TF'; test_order_TF'];
+
+% find optimal c/g parameters----cross validation method
+% [bestacc1,bestc1,bestg1,cg1] = SVM_Search_cg(SVM_Train_label,SVM_Train_matrix,-50,50,-50,50,4,1,1,0);
+% [bestacc,bestc,bestg,cg] = SVM_Search_cg(SVM_Train_label,SVM_Train_matrix,(bestc1-1),(bestc1+1),(bestg1-1),(bestg1+1),4,0.1,0.1,bestacc1);
+% cmd=['-t 2 -c ',num2str(bestc),' -g ',num2str(bestg)];
+
+% use optimal parameters to create & train svm model
+cmd=['-t 2 -c ',num2str(2^-0.2),' -g ',num2str(2^6)];
+svm_model = svmtrain(SVM_Train_label,SVM_Train_matrix,cmd);
+
+% predict
+[SVM_Train_matrix,PS] = mapminmax('apply',candidates',PS);
 SVM_Train_matrix = SVM_Train_matrix';
 
 SVM_Train_label = order_TF';
 
-% find optimal c/g parameters----cross validation method
-% [bestacc,bestc,bestg] = SVM_Search_cg(SVM_Train_label,SVM_Train_matrix,-50,50,-50,50,4,1,1);
-% cmd=sprintf('-t 2 -c %f -g %f ',bestc,bestg);
-
-% use optimal parameters to create & train svm model
-cmd=sprintf('-t 2 -c %f -g %f ',2^26,2^-28);
-svm_model = svmtrain(SVM_Train_label,SVM_Train_matrix,cmd);
-
-% predict
 [predict_SVM_train_label,accuracy_SVM_train,prob_estimates1] = svmpredict(SVM_Train_label,SVM_Train_matrix,svm_model);
 SVM_train_result = [SVM_Train_label predict_SVM_train_label];
 

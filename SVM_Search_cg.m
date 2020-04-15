@@ -12,7 +12,7 @@ eps = 1e-4;
 for i = 1:m
     for j = 1:n
         cmd = ['-v ',num2str(v),' -c ',num2str( basenum^X(i,j) ),' -g ',num2str( basenum^Y(i,j) )];
-        cg(i,j) = libsvmtrain(train_label, train_data, cmd);
+        cg(i,j) = svmtrain(train_label, train_data, cmd);
 
         if cg(i,j) > bestacc
             bestacc = cg(i,j);
