@@ -2,14 +2,14 @@
 libsvm-3.23 should be installed in Matlab before executing matlab file. My Matlab version is Matlab 2017b.
 
 2. Execution
-If you only want to train the ANN models and SVM model, please only execute training.m and it will take you some time to finish the traning.
+If you only want to train the ANN models and SVM model once, please only execute training.m and it will take you some time to finish the traning.
 The trained models will be saved in folder of 'trained model'.
 
 If you only want to test the trained models and see the results, please only execute testing.m. The predicting accuracy of trained model will be shown.
 
-If you want to both train and test the models, please only execute main.m, which can run training.m and testing.m automatically.
+If you want to both train and test the models and try to find the optimal parameters, please only execute main.m, which can run training.m and testing.m automatically and find the optimal parameters by using simulated annealing method.
 
 If you have any question, please feel free to contact me. 1731609@tongji.edu.cn
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Created by Bufan Shi
